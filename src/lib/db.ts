@@ -1,7 +1,7 @@
 "use client";
 
 const DB_NAME = "loveyoumom-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const STORES = [
   "memories",
@@ -15,6 +15,12 @@ const STORES = [
   "familyTree",
   "promises",
   "celebration",
+  "collages",
+  "coupons",
+  "bucketList",
+  "giftBox",
+  "memoryJar",
+  "photoBooth",
 ] as const;
 
 export type StoreName = (typeof STORES)[number];
@@ -116,6 +122,12 @@ export const MIGRATION_MAP: Record<StoreName, string> = {
   familyTree: "mk-family",
   promises: "mk-promises",
   celebration: "mk-celebration",
+  collages: "mk-collages",
+  coupons: "mk-coupons",
+  bucketList: "mk-bucket-list",
+  giftBox: "mk-gift-box",
+  memoryJar: "mk-memory-jar",
+  photoBooth: "mk-photo-booth",
 };
 
 export async function migrateFromLocalStorage(): Promise<boolean> {

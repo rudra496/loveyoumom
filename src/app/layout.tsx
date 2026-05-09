@@ -6,7 +6,13 @@ import { DarkModeProvider } from "@/lib/store";
 
 export const metadata: Metadata = {
   title: "Love You Mom — Your Mother's Story, Beautifully Preserved",
-  description: "An interactive digital memory book for Mother's Day",
+  description: "An interactive digital memory book for Mother's Day. Create cards, collages, photo booths, love letters, and more!",
+  keywords: ["mothers day", "gift", "digital", "memory", "love", "card", "collage"],
+  openGraph: {
+    title: "Love You Mom — Your Mother's Story, Beautifully Preserved",
+    description: "Create beautiful digital gifts for your mom — cards, collages, love letters, and more!",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href="https://www.youtube.com/@rudrasarker9732" target="_blank" className="hover:text-rose transition">📺 YouTube</a>
               </div>
               <p className="mt-2">Happy Mother&apos;s Day 💐</p>
+              <p className="mt-1 text-xs">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose/10 text-rose font-medium">
+                  ⚡ Built with TRAE IDE
+                </span>
+              </p>
             </footer>
           </LanguageProvider>
         </DarkModeProvider>
