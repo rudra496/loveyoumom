@@ -67,7 +67,7 @@ export default function Home() {
             ❤️
           </motion.div>
           <h1 className="text-5xl md:text-7xl font-heading font-bold bg-gradient-to-r from-rose via-lavender to-gold bg-clip-text text-transparent mb-4">
-            Maa Ki Kahani
+            Love You Mom
           </h1>
           <p className={`text-lg md:text-xl max-w-xl mx-auto mb-2 ${dark ? "text-gray-300" : "text-gray-600"}`}>
             {t("subtitle")}
@@ -145,7 +145,7 @@ export default function Home() {
       {/* Footer */}
       <footer className={`relative z-10 py-8 text-center ${dark ? "text-gray-600" : "text-gray-400"}`}>
         <p className="text-sm">Made with ❤️ for mothers everywhere</p>
-        <p className="text-xs mt-1">Maa Ki Kahani © 2026</p>
+        <p className="text-xs mt-1">Love You Mom © 2026</p>
       </footer>
     </div>
   );

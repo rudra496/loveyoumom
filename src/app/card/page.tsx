@@ -57,7 +57,7 @@ export default function Card() {
     const html2canvas = (await import("html2canvas")).default;
     const canvas = await html2canvas(cardRef.current, { scale: 3, backgroundColor: null, useCORS: true });
     const link = document.createElement("a");
-    link.download = `maa-ki-kahani-card-${Date.now()}.png`;
+    link.download = `loveyoumom-card-${Date.now()}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   };
@@ -126,7 +126,7 @@ export default function Card() {
           <div className="absolute top-1/2 right-4 text-3xl opacity-20 -translate-y-1/2">🌺</div>
 
           <div className="text-6xl mb-4">{selectedTemplate.emoji}</div>
-          <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: font.value }}>Maa Ki Kahani</h2>
+          <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: font.value }}>Love You Mom</h2>
           {momName && <p className="text-lg font-semibold mb-4" style={{ fontFamily: font.value }}>For {momName}</p>}
           <div className="w-16 h-0.5 bg-white/40 mx-auto mb-4" />
           <p className="text-lg italic max-w-sm leading-relaxed" style={{ fontFamily: font.value }}>&ldquo;{message}&rdquo;</p>

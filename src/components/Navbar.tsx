@@ -44,7 +44,7 @@ export default function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${dark ? "glass-dark bg-black/40" : "glass bg-white/60"}`}>
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="font-heading text-xl font-bold text-rose">
-          🌸 Maa Ki Kahani
+          🌸 Love You Mom
         </Link>
         {/* Desktop */}
         <div className="hidden lg:flex items-center gap-4 flex-wrap">

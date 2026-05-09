@@ -1,4 +1,4 @@
-# 🌸 Love You Mom — Maa Ki Kahani
+# 🌸 Love You Mom — Love You Mom
 
 > *An interactive digital memory book for the most important woman in your life.*
 
