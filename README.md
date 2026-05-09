@@ -60,3 +60,5 @@ npm start
 
 ## 📝 License
 MIT — Built with ❤️ for moms everywhere.
+
+#BuiltWithTRAE #Trae
