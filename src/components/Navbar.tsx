@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
-import { useDarkMode } from "@/lib/store";
+import { useDarkMode, setMigrationToast } from "@/lib/store";
+import DataManager from "./DataManager";
 
 const links = [
   { href: "/", label: "home", emoji: "🏠" },
@@ -28,7 +29,15 @@ export default function Navbar() {
   const { t, lang, toggle } = useLang();
   const { dark, toggleDark } = useDarkMode();
   const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMigrationToast((msg: string) => {
+      setToast(msg);
+      setTimeout(() => setToast(null), 3000);
+    });
+  }, []);
 
   useEffect(() => {
     if (dark) {
@@ -60,6 +69,7 @@ export default function Navbar() {
           <button onClick={toggle} className="px-3 py-1 rounded-full bg-lavender/20 text-lavender text-sm font-semibold hover:bg-lavender/40 transition">
             {lang === "en" ? "বাংলা" : "English"}
           </button>
+          <DataManager />
         </div>
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 lg:hidden">
@@ -69,6 +79,7 @@ export default function Navbar() {
           <button onClick={toggle} className="px-2 py-1 rounded-full bg-lavender/20 text-lavender text-xs font-semibold">
             {lang === "en" ? "বাং" : "EN"}
           </button>
+          <DataManager />
           <button onClick={() => setOpen(!open)} className={dark ? "text-white" : "text-gray-700"}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {open ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
@@ -91,6 +102,12 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Migration toast */}
+      {toast && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[200] bg-green-500 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium animate-bounce">
+          {toast}
+        </div>
+      )}
     </nav>
   );
 }

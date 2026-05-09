@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext, useCallback } from "react";
+import { dbGet, dbPut, StoreName, migrateFromLocalStorage } from "./db";
 
 export interface Memory {
   id: string;
@@ -111,21 +112,6 @@ export function getGradient(i: number) {
   return GRADIENTS[i % GRADIENTS.length];
 }
 
-function getItem<T>(key: string, fallback: T): T {
-  if (typeof window === "undefined") return fallback;
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function setItem<T>(key: string, data: T) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
 // Seed data
 const seedMemories: Memory[] = [
   { id: "s1", date: "1990-05-15", title: "The Day You Were Born", description: "The most beautiful day of my life. Holding you for the first time changed everything.", photo: "" },
@@ -187,75 +173,114 @@ const seedCelebration: CelebrationConfig = {
   name: "Mom",
 };
 
+// Migration state
+let migrationChecked = false;
+let migrationToast: ((msg: string) => void) | null = null;
+
+export function setMigrationToast(fn: (msg: string) => void) {
+  migrationToast = fn;
+}
+
+function useIndexedDB<T>(store: StoreName, fallback: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [data, setData] = useState<T>(fallback);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let cancelled = false;
+
+    async function load() {
+      // Run migration once
+      if (!migrationChecked) {
+        migrationChecked = true;
+        try {
+          const migrated = await migrateFromLocalStorage();
+          if (migrated && migrationToast) {
+            migrationToast("Data migrated to improved storage ✓");
+          }
+        } catch { /* ignore */ }
+      }
+
+      try {
+        const stored = await dbGet<T>(store);
+        if (!cancelled && stored !== undefined) {
+          setData(stored);
+        }
+      } catch { /* use fallback */ }
+      if (!cancelled) setLoaded(true);
+    }
+
+    load();
+    return () => { cancelled = true; };
+  }, [store]);
+
+  const update: React.Dispatch<React.SetStateAction<T>> = useCallback((val) => {
+    setData((prev) => {
+      const next = typeof val === "function" ? (val as (p: T) => T)(prev) : val;
+      if (loaded && typeof window !== "undefined") {
+        dbPut(store, next).catch(() => {});
+      }
+      return next;
+    });
+  }, [store, loaded]);
+
+  return [data, update];
+}
+
 // Hooks
 export function useMemories() {
-  const [items, setItems] = useStored<Memory[]>("mk-memories", seedMemories);
+  const [items, setItems] = useIndexedDB<Memory[]>("memories", seedMemories);
   return { items, setItems, add: (m: Omit<Memory, "id">) => { const n = { ...m, id: "m" + Date.now() }; setItems([...items, n]); } };
 }
 
 export function useRecipes() {
-  const [items, setItems] = useStored<Recipe[]>("mk-recipes", seedRecipes);
+  const [items, setItems] = useIndexedDB<Recipe[]>("recipes", seedRecipes);
   return { items, setItems, add: (r: Omit<Recipe, "id">) => { const n = { ...r, id: "r" + Date.now() }; setItems([...items, n]); } };
 }
 
 export function useVoices() {
-  const [items, setItems] = useStored<VoiceRecording[]>("mk-voices", []);
+  const [items, setItems] = useIndexedDB<VoiceRecording[]>("voices", []);
   return { items, setItems, add: (v: Omit<VoiceRecording, "id">) => { const n = { ...v, id: "v" + Date.now() }; setItems([...items, n]); } };
 }
 
 export function useWisdom() {
-  const [items, setItems] = useStored<WisdomItem[]>("mk-wisdom", seedWisdom);
+  const [items, setItems] = useIndexedDB<WisdomItem[]>("wisdom", seedWisdom);
   return { items, setItems, add: (w: Omit<WisdomItem, "id" | "gradient">) => { const n = { ...w, id: "w" + Date.now(), gradient: getGradient(items.length) }; setItems([...items, n]); } };
 }
 
 export function useGallery() {
-  const [items, setItems] = useStored<GalleryPhoto[]>("mk-gallery", []);
+  const [items, setItems] = useIndexedDB<GalleryPhoto[]>("gallery", []);
   return { items, setItems, add: (g: Omit<GalleryPhoto, "id">) => { const n = { ...g, id: "g" + Date.now() }; setItems([...items, n]); } };
 }
 
 export function useLoveLetters() {
-  const [items, setItems] = useStored<LoveLetter[]>("mk-love-letters", seedLoveLetters);
+  const [items, setItems] = useIndexedDB<LoveLetter[]>("loveLetters", seedLoveLetters);
   return { items, setItems, add: (l: Omit<LoveLetter, "id">) => { const n = { ...l, id: "ll" + Date.now() }; setItems([...items, n]); }, remove: (id: string) => setItems(items.filter((i) => i.id !== id)) };
 }
 
 export function useGratitude() {
-  const [items, setItems] = useStored<GratitudeEntry[]>("mk-gratitude", seedGratitude);
+  const [items, setItems] = useIndexedDB<GratitudeEntry[]>("gratitude", seedGratitude);
   return { items, setItems, add: (g: Omit<GratitudeEntry, "id">) => { const n = { ...g, id: "gr" + Date.now() }; setItems([...items, n]); }, remove: (id: string) => setItems(items.filter((i) => i.id !== id)) };
 }
 
 export function useQuiz() {
-  const [items, setItems] = useStored<QuizQuestion[]>("mk-quiz", seedQuiz);
+  const [items, setItems] = useIndexedDB<QuizQuestion[]>("quiz", seedQuiz);
   return { items, setItems, add: (q: Omit<QuizQuestion, "id">) => { const n = { ...q, id: "q" + Date.now() }; setItems([...items, n]); }, update: (id: string, data: Partial<QuizQuestion>) => setItems(items.map((i) => i.id === id ? { ...i, ...data } : i)), remove: (id: string) => setItems(items.filter((i) => i.id !== id)) };
 }
 
 export function useFamily() {
-  const [items, setItems] = useStored<FamilyMember[]>("mk-family", seedFamily);
+  const [items, setItems] = useIndexedDB<FamilyMember[]>("familyTree", seedFamily);
   return { items, setItems, add: (f: Omit<FamilyMember, "id">) => { const n = { ...f, id: "fm" + Date.now() }; setItems([...items, n]); }, remove: (id: string) => setItems(items.filter((i) => i.id !== id)) };
 }
 
 export function usePromises() {
-  const [items, setItems] = useStored<PromiseItem[]>("mk-promises", seedPromises);
+  const [items, setItems] = useIndexedDB<PromiseItem[]>("promises", seedPromises);
   return { items, setItems, add: (p: Omit<PromiseItem, "id">) => { const n = { ...p, id: "pr" + Date.now() }; setItems([...items, n]); }, toggle: (id: string) => setItems(items.map((i) => i.id === id ? { ...i, kept: !i.kept, dateKept: !i.kept ? new Date().toISOString().split("T")[0] : null } : i)), remove: (id: string) => setItems(items.filter((i) => i.id !== id)) };
 }
 
 export function useCelebration() {
-  const [config, setConfig] = useStored<CelebrationConfig>("mk-celebration", seedCelebration);
+  const [config, setConfig] = useIndexedDB<CelebrationConfig>("celebration", seedCelebration);
   return { config, setConfig };
-}
-
-function useStored<T>(key: string, fallback: T): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [data, setData] = useState<T>(fallback);
-  useEffect(() => {
-    setData(getItem(key, fallback));
-  }, [key]);
-  const update = (val: T | ((prev: T) => T)) => {
-    setData((prev) => {
-      const next = typeof val === "function" ? (val as (p: T) => T)(prev) : val;
-      setItem(key, next);
-      return next;
-    });
-  };
-  return [data, update];
 }
 
 export function fileToBase64(file: File): Promise<string> {
