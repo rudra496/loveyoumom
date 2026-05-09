@@ -200,13 +200,13 @@ const seedFamily: FamilyMember[] = [
 const seedQuiz: QuizQuestion[] = [
   { id: "q1", question: "What is Mom's favorite color?", userAnswer: "", momAnswer: "Red" },
   { id: "q2", question: "What is Mom's favorite food?", userAnswer: "", momAnswer: "Biryani" },
-  { id: "q3", question: "What song does Mom love the most?", userAnswer: "", momAnswer: "Lata Mangeshkar songs" },
-  { id: "q4", question: "What is Mom's favorite flower?", userAnswer: "", momAnswer: "Jasmine (Beli)" },
+  { id: "q3", question: "Which singer does Mom love the most?", userAnswer: "", momAnswer: "Lata Mangeshkar" },
+  { id: "q4", question: "What is Mom's favorite flower?", userAnswer: "", momAnswer: "Jasmine | Beli" },
   { id: "q5", question: "What is Mom's favorite season?", userAnswer: "", momAnswer: "Spring" },
-  { id: "q6", question: "What was Mom's childhood dream?", userAnswer: "", momAnswer: "To be a teacher" },
+  { id: "q6", question: "What was Mom's childhood dream?", userAnswer: "", momAnswer: "Teacher" },
   { id: "q7", question: "What is Mom's go-to comfort movie?", userAnswer: "", momAnswer: "Mother India" },
   { id: "q8", question: "What is Mom's favorite hobby?", userAnswer: "", momAnswer: "Gardening" },
-  { id: "q9", question: "What is the first thing Mom does every morning?", userAnswer: "", momAnswer: "Prays and makes tea" },
+  { id: "q9", question: "What is the first thing Mom does every morning?", userAnswer: "", momAnswer: "Pray | Tea" },
   { id: "q10", question: "What is Mom's most-used phrase?", userAnswer: "", momAnswer: "Eat well, study hard" },
 ];
 
