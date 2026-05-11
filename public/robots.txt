@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://iloveyoumom.vercel.app/sitemap.xml
