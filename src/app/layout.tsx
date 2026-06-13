@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import { DarkModeProvider } from "@/lib/store";
 
-const SITE_URL = "https://iloveyoumom.vercel.app";
+const SITE_URL = "https://rudra496.github.io/loveyoumom";
 const SITE_NAME = "Love You Mom";
 const SITE_TITLE = "Love You Mom — Interactive Digital Memory Book | Mother's Day Tribute";
 const SITE_DESCRIPTION =

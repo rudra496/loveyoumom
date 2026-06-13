@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-const SITE_URL = "https://iloveyoumom.vercel.app";
+const SITE_URL = "https://rudra496.github.io/loveyoumom";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
