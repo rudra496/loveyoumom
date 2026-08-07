@@ -43,9 +43,12 @@ export default function LoveLetter() {
   };
 
   const printLetter = () => {
+    const escapeHTML = (str: string) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    const safeFont = font.replace(/[^a-zA-Z0-9\s,'-]/g, "");
+    const safeContent = escapeHTML(content);
     const printWin = window.open("", "_blank");
     if (printWin) {
-      printWin.document.write(`<html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Satisfy&family=Pacifico&family=Great+Vibes&display=swap" rel="stylesheet"><style>body{font-family:${font};padding:60px;line-height:2;font-size:18px;color:#333;max-width:600px;margin:auto;}h2{text-align:center;margin-bottom:20px;}</style></head><body><h2>💌 A Letter to Mom</h2><pre style="white-space:pre-wrap;font-family:inherit;">${content}</pre><p style="text-align:center;margin-top:40px;">— With all my love ❤️</p></body></html>`);
+      printWin.document.write(`<html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Satisfy&family=Pacifico&family=Great+Vibes&display=swap" rel="stylesheet"><style>body{font-family:${safeFont};padding:60px;line-height:2;font-size:18px;color:#333;max-width:600px;margin:auto;}h2{text-align:center;margin-bottom:20px;}</style></head><body><h2>💌 A Letter to Mom</h2><pre style="white-space:pre-wrap;font-family:inherit;">${safeContent}</pre><p style="text-align:center;margin-top:40px;">— With all my love ❤️</p></body></html>`);
       printWin.document.close();
       printWin.print();
     }
