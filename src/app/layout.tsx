@@ -108,6 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <script defer src="https://analytics.129-159-229-170.sslip.io/script.js" data-website-id="1b3984ee-977c-4275-bb3d-1d4a1728cb30"></script>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&family=Satisfy&family=Pacifico&family=Great+Vibes&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"
