@@ -37,7 +37,10 @@ export const metadata: Metadata = {
   publisher: "Rudra Sarker",
   category: "Lifestyle",
   metadataBase: new URL(SITE_URL),
-  alternates: {
+  verification: {
+    google: "NE4MzR6NIdQYAoPS52dBxjRxvB8TWUTt4aGM2Uachik",
+  },
+    alternates: {
     canonical: SITE_URL,
   },
   openGraph: {
