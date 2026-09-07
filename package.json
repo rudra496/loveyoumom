@@ -24,7 +24,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
-    "postcss": "^8.5.25",
+    "postcss": "^8.5.28",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
   },
